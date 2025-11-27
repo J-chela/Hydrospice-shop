@@ -10,10 +10,10 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->is_admin) {
-            return $next($request);
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            abort(403, 'Unauthorized access.');
         }
 
-        return redirect('/dashboard')->with('error', 'Access denied.');
+        return $next($request);
     }
 }

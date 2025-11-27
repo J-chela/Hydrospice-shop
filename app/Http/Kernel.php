@@ -10,10 +10,11 @@ class Kernel extends HttpKernel
      * The application's global HTTP middleware stack.
      *
      * These middleware are run during every request to your application.
+     *
+     * @var array
      */
     protected $middleware = [
-        // Laravel default global middleware
-        \App\Http\Middleware\TrustHosts::class,
+        // \App\Http\Middleware\TrustHosts::class, // enable if you need host validation
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
@@ -24,6 +25,8 @@ class Kernel extends HttpKernel
 
     /**
      * The application's route middleware groups.
+     *
+     * @var array
      */
     protected $middlewareGroups = [
         'web' => [
@@ -36,7 +39,8 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
+            // If you use API throttling on 'api' group, use the throttle middleware:
+            // \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -45,6 +49,8 @@ class Kernel extends HttpKernel
      * The application's route middleware.
      *
      * These middleware may be assigned to groups or used individually.
+     *
+     * @var array
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
@@ -57,7 +63,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
-        // ✅ Your custom admin middleware
+        // Register custom middleware
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
     ];
 }
+

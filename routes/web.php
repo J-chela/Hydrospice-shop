@@ -1,15 +1,17 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application.
+| All web routes for your HydroSpice Shop app.
 |
 */
 
@@ -18,22 +20,61 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// 👤 User dashboard (requires login)
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
-// 🧩 Profile routes (only for authenticated users)
-Route::middleware('auth')->group(function () {
+// 👤 Authenticated user routes
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    // 🌿 Main User Dashboard
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])
+        ->name('dashboard');
+
+    // 🌿 Dashboard sections
+    Route::get('/dashboard/orders', [UserDashboardController::class, 'orders'])
+        ->name('dashboard.orders');
+
+    // 🌿 Settings (now handled by SettingsController)
+    Route::get('/dashboard/settings', [SettingsController::class, 'index'])
+        ->name('dashboard.settings');
+
+    // Settings POST routes
+    Route::post('/dashboard/settings/theme', [SettingsController::class, 'toggleTheme'])
+        ->name('settings.theme');
+
+    Route::post('/dashboard/settings/profile', [SettingsController::class, 'updateProfile'])
+        ->name('settings.profile');
+
+    Route::post('/dashboard/settings/password', [SettingsController::class, 'updatePassword'])
+        ->name('settings.password');
+
+    // 🌿 Favorites section
+    Route::get('/dashboard/favorites', [UserDashboardController::class, 'favorites'])
+        ->name('dashboard.favorites');
+
+    // 💬 User Messages
+    Route::prefix('dashboard/messages')->group(function () {
+        Route::get('/', [MessageController::class, 'index'])->name('dashboard.messages.index');
+        Route::get('/create', [MessageController::class, 'create'])->name('dashboard.messages.create');
+        Route::post('/', [MessageController::class, 'store'])->name('dashboard.messages.store');
+    });
+
+    // 🧩 Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 // 👑 Admin-only routes
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
+
+    // Future admin management pages
+    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::get('/products', [AdminController::class, 'products'])->name('admin.products');
+    Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
 });
 
-// 🔐 Authentication routes (login, register, etc.)
-require __DIR__.'/auth.php';
+
+// 🔐 Authentication routes (login/register/logout)
+require __DIR__ . '/auth.php';
+
