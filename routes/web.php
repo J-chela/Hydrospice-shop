@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\UserSettingsController; // ✅ ADD THIS
 
 /*
 |--------------------------------------------------------------------------
@@ -32,11 +33,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/orders', [UserDashboardController::class, 'orders'])
         ->name('dashboard.orders');
 
-    // 🌿 Settings (now handled by SettingsController)
+    // 🌿 Existing SettingsController (DO NOT REMOVE)
     Route::get('/dashboard/settings', [SettingsController::class, 'index'])
         ->name('dashboard.settings');
 
-    // Settings POST routes
     Route::post('/dashboard/settings/theme', [SettingsController::class, 'toggleTheme'])
         ->name('settings.theme');
 
@@ -45,6 +45,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/dashboard/settings/password', [SettingsController::class, 'updatePassword'])
         ->name('settings.password');
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ✅ NEW: USER PROFILE SETTINGS ROUTES
+    |--------------------------------------------------------------------------
+    | These handle editing name, email, phone, password (UserSettingsController)
+    */
+    Route::get('/dashboard/settings/profile/info', [UserSettingsController::class, 'edit'])
+        ->name('user.settings');
+
+    Route::post('/dashboard/settings/profile/info/update', [UserSettingsController::class, 'update'])
+        ->name('user.settings.update');
+
+    Route::post('/dashboard/settings/profile/password/update', [UserSettingsController::class, 'updatePassword'])
+        ->name('user.settings.password');
+
+
 
     // 🌿 Favorites section
     Route::get('/dashboard/favorites', [UserDashboardController::class, 'favorites'])
@@ -68,7 +87,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
 
-    // Future admin management pages
     Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
     Route::get('/products', [AdminController::class, 'products'])->name('admin.products');
     Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
@@ -77,4 +95,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 // 🔐 Authentication routes (login/register/logout)
 require __DIR__ . '/auth.php';
+
 
