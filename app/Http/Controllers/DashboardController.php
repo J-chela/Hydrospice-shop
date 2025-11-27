@@ -8,7 +8,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Example: later we’ll fetch user's orders or plants here
-        return view('dashboard');
+        return view('Dashboard.dashboard');
     }
 }

@@ -6,15 +6,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\UserSettingsController; // ✅ ADD THIS
+use App\Http\Controllers\UserSettingsController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-| All web routes for your HydroSpice Shop app.
-|
-*/
 
 // 🏠 Public homepage
 Route::get('/', function () {
@@ -25,34 +18,49 @@ Route::get('/', function () {
 // 👤 Authenticated user routes
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // 🌿 Main User Dashboard
-    Route::get('/dashboard', [UserDashboardController::class, 'index'])
-        ->name('dashboard');
-
-    // 🌿 Dashboard sections
-    Route::get('/dashboard/orders', [UserDashboardController::class, 'orders'])
-        ->name('dashboard.orders');
-
-    // 🌿 Existing SettingsController (DO NOT REMOVE)
-    Route::get('/dashboard/settings', [SettingsController::class, 'index'])
-        ->name('dashboard.settings');
-
-    Route::post('/dashboard/settings/theme', [SettingsController::class, 'toggleTheme'])
-        ->name('settings.theme');
-
-    Route::post('/dashboard/settings/profile', [SettingsController::class, 'updateProfile'])
-        ->name('settings.profile');
-
-    Route::post('/dashboard/settings/password', [SettingsController::class, 'updatePassword'])
-        ->name('settings.password');
-
+    /*
+    |--------------------------------------------------------------------------
+    | USER DASHBOARD
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/orders', [UserDashboardController::class, 'orders'])->name('dashboard.orders');
+    Route::get('/dashboard/favorites', [UserDashboardController::class, 'favorites'])->name('dashboard.favorites');
 
 
     /*
     |--------------------------------------------------------------------------
-    | ✅ NEW: USER PROFILE SETTINGS ROUTES
+    | SETTINGS (SettingsController)
     |--------------------------------------------------------------------------
-    | These handle editing name, email, phone, password (UserSettingsController)
+    */
+    Route::get('/dashboard/settings', [SettingsController::class, 'index'])
+        ->name('dashboard.settings');
+
+    // Theme Toggle
+    Route::post('/dashboard/settings/theme', [SettingsController::class, 'toggleTheme'])
+        ->name('settings.theme');
+
+    // ⭐ Update Profile Photo
+    Route::post('/dashboard/settings/photo', [SettingsController::class, 'updatePhoto'])
+        ->name('settings.updatePhoto');
+
+    // Update Name + Email
+    Route::post('/dashboard/settings/info', [SettingsController::class, 'updateInfo'])
+        ->name('settings.updateInfo');
+
+    // Update Password
+    Route::post('/dashboard/settings/password/update', [SettingsController::class, 'updatePassword'])
+        ->name('settings.updatePassword');
+
+    // Delete Account
+    Route::post('/dashboard/settings/delete', [SettingsController::class, 'deleteAccount'])
+        ->name('settings.deleteAccount');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | USER PROFILE (UserSettingsController)
+    |--------------------------------------------------------------------------
     */
     Route::get('/dashboard/settings/profile/info', [UserSettingsController::class, 'edit'])
         ->name('user.settings');
@@ -64,19 +72,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('user.settings.password');
 
 
-
-    // 🌿 Favorites section
-    Route::get('/dashboard/favorites', [UserDashboardController::class, 'favorites'])
-        ->name('dashboard.favorites');
-
-    // 💬 User Messages
+    /*
+    |--------------------------------------------------------------------------
+    | USER MESSAGES
+    |--------------------------------------------------------------------------
+    */
     Route::prefix('dashboard/messages')->group(function () {
         Route::get('/', [MessageController::class, 'index'])->name('dashboard.messages.index');
         Route::get('/create', [MessageController::class, 'create'])->name('dashboard.messages.create');
         Route::post('/', [MessageController::class, 'store'])->name('dashboard.messages.store');
     });
 
-    // 🧩 Profile routes
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROFILE ROUTES
+    |--------------------------------------------------------------------------
+    */
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -84,16 +96,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 // 👑 Admin-only routes
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->group(function () {
 
-    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
-    Route::get('/products', [AdminController::class, 'products'])->name('admin.products');
-    Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
-});
+        Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
+        Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
+        Route::get('/products', [AdminController::class, 'products'])->name('admin.products');
+        Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
+    });
 
 
-// 🔐 Authentication routes (login/register/logout)
+// 🔐 Authentication routes
 require __DIR__ . '/auth.php';
-
-
