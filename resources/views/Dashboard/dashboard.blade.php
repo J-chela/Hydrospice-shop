@@ -31,7 +31,8 @@
     <!-- MAIN CONTENT -->
     <main class="flex-1 p-10">
 
-        <div class="bg-white shadow rounded-lg p-6">
+       <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6">
+
             <h3 class="text-lg font-semibold mb-2">
                 Welcome, {{ Auth::user()->name }} 🌿
             </h3>
