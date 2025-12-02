@@ -23,37 +23,37 @@ Route::middleware(['auth', 'verified'])->group(function () {
     | USER DASHBOARD
     |--------------------------------------------------------------------------
     */
-    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard/orders', [UserDashboardController::class, 'orders'])->name('dashboard.orders');
-    Route::get('/dashboard/favorites', [UserDashboardController::class, 'favorites'])->name('dashboard.favorites');
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])
+        ->name('dashboard');
+
+    Route::get('/dashboard/orders', [UserDashboardController::class, 'orders'])
+        ->name('dashboard.orders');
+
+    Route::get('/dashboard/favorites', [UserDashboardController::class, 'favorites'])
+        ->name('dashboard.favorites');
+
+    Route::get('/dashboard/plants', [UserDashboardController::class, 'plants'])
+        ->name('dashboard.plants');
+
+    Route::get('/dashboard/settings', [UserDashboardController::class, 'settings'])
+        ->name('dashboard.settings');
 
 
     /*
     |--------------------------------------------------------------------------
-    | SETTINGS (SettingsController)
+    | ACCOUNT SETTINGS (SettingsController)
     |--------------------------------------------------------------------------
     */
-    Route::get('/dashboard/settings', [SettingsController::class, 'index'])
-        ->name('dashboard.settings');
-
-    // Theme Toggle
-    Route::post('/dashboard/settings/theme', [SettingsController::class, 'toggleTheme'])
-        ->name('settings.theme');
-
-    // ⭐ Update Profile Photo
-    Route::post('/dashboard/settings/photo', [SettingsController::class, 'updatePhoto'])
+    Route::post('/settings/photo', [SettingsController::class, 'updatePhoto'])
         ->name('settings.updatePhoto');
 
-    // Update Name + Email
-    Route::post('/dashboard/settings/info', [SettingsController::class, 'updateInfo'])
+    Route::post('/settings/info', [SettingsController::class, 'updateInfo'])
         ->name('settings.updateInfo');
 
-    // Update Password
-    Route::post('/dashboard/settings/password/update', [SettingsController::class, 'updatePassword'])
+    Route::post('/settings/password/update', [SettingsController::class, 'updatePassword'])
         ->name('settings.updatePassword');
 
-    // Delete Account
-    Route::post('/dashboard/settings/delete', [SettingsController::class, 'deleteAccount'])
+    Route::post('/settings/delete', [SettingsController::class, 'deleteAccount'])
         ->name('settings.deleteAccount');
 
 
@@ -62,13 +62,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     | USER PROFILE (UserSettingsController)
     |--------------------------------------------------------------------------
     */
-    Route::get('/dashboard/settings/profile/info', [UserSettingsController::class, 'edit'])
+    Route::get('/settings/profile', [UserSettingsController::class, 'edit'])
         ->name('user.settings');
 
-    Route::post('/dashboard/settings/profile/info/update', [UserSettingsController::class, 'update'])
+    Route::post('/settings/profile/update', [UserSettingsController::class, 'update'])
         ->name('user.settings.update');
 
-    Route::post('/dashboard/settings/profile/password/update', [UserSettingsController::class, 'updatePassword'])
+    Route::post('/settings/profile/password/update', [UserSettingsController::class, 'updatePassword'])
         ->name('user.settings.password');
 
 
@@ -77,10 +77,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     | USER MESSAGES
     |--------------------------------------------------------------------------
     */
-    Route::prefix('dashboard/messages')->group(function () {
-        Route::get('/', [MessageController::class, 'index'])->name('dashboard.messages.index');
-        Route::get('/create', [MessageController::class, 'create'])->name('dashboard.messages.create');
-        Route::post('/', [MessageController::class, 'store'])->name('dashboard.messages.store');
+    Route::prefix('messages')->group(function () {
+        Route::get('/', [MessageController::class, 'index'])->name('messages.index');
+        Route::get('/create', [MessageController::class, 'create'])->name('messages.create');
+        Route::post('/', [MessageController::class, 'store'])->name('messages.store');
     });
 
 

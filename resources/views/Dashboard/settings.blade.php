@@ -8,6 +8,7 @@
         <h2 class="text-xl font-semibold text-gray-800">User Dashboard</h2>
 
         <nav class="space-y-3">
+
             <a href="{{ route('dashboard') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-100">
                 🏠 <span class="ml-2">Dashboard</span>
             </a>
@@ -23,26 +24,25 @@
             <a href="{{ route('dashboard.settings') }}" class="flex items-center p-3 bg-blue-100 hover:bg-blue-200 rounded-lg">
                 ⚙️ <span class="ml-2">Account Settings</span>
             </a>
+
         </nav>
     </aside>
 
-    <!-- MAIN SETTINGS CONTENT -->
+    <!-- MAIN CONTENT -->
     <main class="flex-1 p-10">
+
         <div class="bg-white shadow-xl rounded-lg p-6 space-y-10">
 
             <h2 class="text-2xl font-semibold text-gray-800">⚙️ Account Settings</h2>
 
-            @php
-                $user = Auth::user();
-            @endphp
+            @php $user = Auth::user(); @endphp
 
-            <!-- PROFILE PHOTO SECTION -->
+            <!-- PROFILE PHOTO -->
             <section>
                 <h3 class="text-lg font-semibold text-gray-700 mb-3">Profile</h3>
 
                 <div class="flex items-center space-x-6">
 
-                    {{-- PROFILE PHOTO --}}
                     @if ($user->profile_photo)
                         <img src="{{ asset('storage/' . $user->profile_photo) }}"
                              class="w-20 h-20 rounded-full object-cover shadow">
@@ -52,10 +52,8 @@
                         </div>
                     @endif
 
-                    {{-- PHOTO UPLOAD FORM --}}
                     <form action="{{ route('settings.updatePhoto') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-
                         <label class="block">
                             <span class="text-gray-700">Change profile photo</span>
                             <input type="file" name="photo" class="mt-2 block w-full">
@@ -69,7 +67,7 @@
                 </div>
             </section>
 
-            <!-- ACCOUNT INFORMATION -->
+            <!-- ACCOUNT INFO -->
             <section>
                 <h3 class="text-lg font-semibold text-gray-700 mb-3">Account Information</h3>
 
@@ -78,14 +76,12 @@
 
                     <div>
                         <label class="block text-gray-700">Name</label>
-                        <input type="text" name="name" value="{{ $user->name }}"
-                               class="w-full mt-1 p-2 border rounded-lg">
+                        <input type="text" name="name" value="{{ $user->name }}" class="w-full mt-1 p-2 border rounded-lg">
                     </div>
 
                     <div>
                         <label class="block text-gray-700">Email</label>
-                        <input type="email" name="email" value="{{ $user->email }}"
-                               class="w-full mt-1 p-2 border rounded-lg">
+                        <input type="email" name="email" value="{{ $user->email }}" class="w-full mt-1 p-2 border rounded-lg">
                     </div>
 
                     <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
@@ -121,21 +117,10 @@
             <section>
                 <h3 class="text-lg font-semibold text-gray-700 mb-3">Appearance</h3>
 
-                <button onclick="toggleTheme()" class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-black">
+                <button onclick="toggleTheme()"
+                        class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-black">
                     🌙 Toggle Dark / Light Mode
                 </button>
-
-                <script>
-                    function toggleTheme() {
-                        document.documentElement.classList.toggle('dark');
-                        localStorage.theme =
-                            document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-                    }
-
-                    if (localStorage.theme === 'dark') {
-                        document.documentElement.classList.add('dark');
-                    }
-                </script>
             </section>
 
             <!-- DELETE ACCOUNT -->
@@ -153,6 +138,7 @@
             </section>
 
         </div>
+
     </main>
 </div>
 @endsection

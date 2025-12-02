@@ -12,6 +12,10 @@ class UserDashboardController extends Controller
         $messages = Message::where('user_id', auth()->id())->latest()->get();
         return view('dashboard.index', compact('messages'));
     }
+    public function plants()
+{
+    return view('dashboard.plants');
+}
 
     public function orders()
     {

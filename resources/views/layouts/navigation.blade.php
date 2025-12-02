@@ -1,137 +1,136 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="flex">
 
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+    <!-- Sidebar -->
+    <aside class="w-20 h-screen bg-white dark:bg-gray-900 
+                 border-r border-gray-200 dark:border-gray-700
+                 flex flex-col items-center py-6">
 
-            <!-- Left Side -->
-            <div class="flex">
+        <!-- Logo -->
+        <a href="{{ route('dashboard') }}" class="mb-8" title="Home">
+            <x-application-logo class="h-10 w-10 text-gray-800 dark:text-gray-100" />
+        </a>
 
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
-                </div>
+        <!-- Dashboard Title -->
+        <h1 class="text-[10px] font-bold tracking-widest 
+                   text-gray-500 dark:text-gray-400 mb-6">
+            DASHBOARD
+        </h1>
 
-                <!-- Nav Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+        <!-- Emoji Menu -->
+        <ul class="flex flex-col space-y-6 text-2xl">
 
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+            <!-- Dashboard -->
+            <li>
+                <a href="{{ route('dashboard') }}"
+                   title="Dashboard"
+                   class="hover:scale-125 transition 
+                          text-gray-600 dark:text-gray-300
+                          @if(request()->routeIs('dashboard')) 
+                              text-blue-500 dark:text-blue-400 
+                          @endif">
+                    🏠
+                </a>
+            </li>
 
-                    <x-nav-link :href="route('dashboard.orders')" :active="request()->routeIs('dashboard.orders')">
-                        {{ __('Orders') }}
-                    </x-nav-link>
+            <!-- Orders -->
+            <li>
+                <a href="{{ route('dashboard.orders') }}"
+                   title="Orders"
+                   class="hover:scale-125 transition 
+                          text-gray-600 dark:text-gray-300
+                          @if(request()->routeIs('dashboard.orders')) 
+                              text-blue-500 dark:text-blue-400 
+                          @endif">
+                    📦
+                </a>
+            </li>
 
-                    <x-nav-link :href="route('dashboard.favorites')" :active="request()->routeIs('dashboard.favorites')">
-                        {{ __('Favorites') }}
-                    </x-nav-link>
+            <!-- Favorites -->
+            <li>
+                <a href="{{ route('dashboard.favorites') }}"
+                   title="Favorites"
+                   class="hover:scale-125 transition 
+                          text-gray-600 dark:text-gray-300
+                          @if(request()->routeIs('dashboard.favorites')) 
+                              text-blue-500 dark:text-blue-400 
+                          @endif">
+                    ⭐
+                </a>
+            </li>
 
-                    <x-nav-link :href="route('dashboard.settings')" :active="request()->routeIs('dashboard.settings')">
-                        {{ __('Settings') }}
-                    </x-nav-link>
+            <!-- Settings -->
+            <li>
+                <a href="{{ route('dashboard.settings') }}"
+                   title="Settings"
+                   class="hover:scale-125 transition 
+                          text-gray-600 dark:text-gray-300
+                          @if(request()->routeIs('dashboard.settings')) 
+                              text-blue-500 dark:text-blue-400 
+                          @endif">
+                    ⚙️
+                </a>
+            </li>
 
-                </div>
-            </div>
-<!-- Right Side -->
-<div class="hidden sm:flex sm:items-center sm:ms-6">
+        </ul>
 
-    <!-- 🌙 Dark Mode Toggle Button -->
-    <button 
-        onclick="toggleTheme()" 
-        class="px-3 py-2 mr-3 rounded-md text-sm 
-               bg-gray-200 text-gray-800 
-               dark:bg-gray-700 dark:text-gray-100">
-        🌙
-    </button>
+        <!-- Bottom buttons -->
+        <div class="mt-auto flex flex-col items-center space-y-4">
 
-    <x-dropdown align="right" width="48">
-        <x-slot name="trigger">
-            <button class="inline-flex items-center px-3 py-2 rounded-md text-sm text-gray-500 bg-white dark:bg-gray-800 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-300">
-                <div>{{ Auth::user()->name }}</div>
-                <svg class="ms-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                    <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
-                </svg>
+            <!-- Dark Mode Toggle -->
+            <button onclick="toggleTheme()"
+                    title="Toggle Dark Mode"
+                    class="text-xl px-3 py-2 rounded-lg 
+                           bg-gray-200 dark:bg-gray-700 
+                           text-gray-700 dark:text-gray-200 
+                           hover:scale-110 transition">
+                🌙
             </button>
-        </x-slot>
 
-        <x-slot name="content">
-            <x-dropdown-link :href="route('profile.edit')">
-                {{ __('Profile') }}
-            </x-dropdown-link>
+            <!-- User Dropdown -->
+            <x-dropdown align="right" width="48">
+                <x-slot name="trigger">
+                    <button title="Account Menu"
+                            class="text-xl px-3 py-2 rounded-lg 
+                                   bg-gray-100 dark:bg-gray-800 
+                                   text-gray-700 dark:text-gray-200 
+                                   hover:scale-110 transition">
+                        👤
+                    </button>
+                </x-slot>
 
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <x-dropdown-link href="{{ route('logout') }}"
-                    onclick="event.preventDefault(); this.closest('form').submit();">
-                    {{ __('Logout') }}
-                </x-dropdown-link>
-            </form>
-        </x-slot>
-    </x-dropdown>
-</div>
+                <x-slot name="content">
+                    <x-dropdown-link :href="route('profile.edit')">
+                        Profile
+                    </x-dropdown-link>
 
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = !open" class="p-2 rounded-md text-gray-400 hover:text-gray-500">
-                    <svg x-show="!open" x-cloak class="h-6 w-6" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    <svg x-show="open" x-cloak class="h-6 w-6" fill="none" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <x-dropdown-link href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); this.closest('form').submit();">
+                            Logout
+                        </x-dropdown-link>
+                    </form>
+                </x-slot>
+            </x-dropdown>
 
         </div>
-    </div>
 
-    <!-- Responsive Nav Menu -->
-    <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
+    </aside>
 
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-
-            <x-responsive-nav-link :href="route('dashboard.orders')" :active="request()->routeIs('dashboard.orders')">
-                {{ __('Orders') }}
-            </x-responsive-nav-link>
-
-            <x-responsive-nav-link :href="route('dashboard.favorites')" :active="request()->routeIs('dashboard.favorites')">
-                {{ __('Favorites') }}
-            </x-responsive-nav-link>
-
-            <x-responsive-nav-link :href="route('dashboard.settings')" :active="request()->routeIs('dashboard.settings')">
-                {{ __('Settings') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-responsive-nav-link href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); this.closest('form').submit();">
-                        {{ __('Logout') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
-
-    </div>
 </nav>
 
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const dark = html.classList.contains('dark');
+
+        html.classList.toggle('dark', !dark);
+        localStorage.setItem('theme', dark ? 'light' : 'dark');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    });
+</script>
