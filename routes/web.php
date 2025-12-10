@@ -9,13 +9,21 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserSettingsController;
 
 
-// 🏠 Public homepage
+/*
+|--------------------------------------------------------------------------
+| PUBLIC ROUTE
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
 
-// 👤 Authenticated user routes
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATED USER ROUTES
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'verified'])->group(function () {
 
     /*
@@ -41,7 +49,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | ACCOUNT SETTINGS (SettingsController)
+    | ACCOUNT SETTINGS — SettingsController
     |--------------------------------------------------------------------------
     */
     Route::post('/settings/photo', [SettingsController::class, 'updatePhoto'])
@@ -59,7 +67,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | USER PROFILE (UserSettingsController)
+    | USER PROFILE — UserSettingsController
     |--------------------------------------------------------------------------
     */
     Route::get('/settings/profile', [UserSettingsController::class, 'edit'])
@@ -89,13 +97,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     | PROFILE ROUTES
     |--------------------------------------------------------------------------
     */
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
 
-// 👑 Admin-only routes
+/*
+|--------------------------------------------------------------------------
+| ADMIN ROUTES
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->group(function () {
@@ -107,5 +124,9 @@ Route::middleware(['auth', 'admin'])
     });
 
 
-// 🔐 Authentication routes
+/*
+|--------------------------------------------------------------------------
+| AUTH ROUTES
+|--------------------------------------------------------------------------
+*/
 require __DIR__ . '/auth.php';

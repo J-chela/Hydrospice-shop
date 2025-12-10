@@ -8,7 +8,6 @@
         <h2 class="text-xl font-semibold text-gray-800">User Dashboard</h2>
 
         <nav class="space-y-3">
-
             <a href="{{ route('dashboard') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-100">
                 🏠 <span class="ml-2">Dashboard</span>
             </a>
@@ -21,10 +20,9 @@
                 🛒 <span class="ml-2">My Orders</span>
             </a>
 
-            <a href="{{ route('dashboard.settings') }}" class="flex items-center p-3 bg-blue-100 hover:bg-blue-200 rounded-lg">
+            <a href="{{ route('dashboard.settings') }}" class="flex items-center p-3 rounded-lg bg-blue-100 hover:bg-blue-200">
                 ⚙️ <span class="ml-2">Account Settings</span>
             </a>
-
         </nav>
     </aside>
 
@@ -76,12 +74,14 @@
 
                     <div>
                         <label class="block text-gray-700">Name</label>
-                        <input type="text" name="name" value="{{ $user->name }}" class="w-full mt-1 p-2 border rounded-lg">
+                        <input type="text" name="name" value="{{ $user->name }}"
+                               class="w-full mt-1 p-2 border rounded-lg">
                     </div>
 
                     <div>
                         <label class="block text-gray-700">Email</label>
-                        <input type="email" name="email" value="{{ $user->email }}" class="w-full mt-1 p-2 border rounded-lg">
+                        <input type="email" name="email" value="{{ $user->email }}"
+                               class="w-full mt-1 p-2 border rounded-lg">
                     </div>
 
                     <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
@@ -99,12 +99,14 @@
 
                     <div>
                         <label class="block text-gray-700">Current Password</label>
-                        <input type="password" name="current_password" class="w-full mt-1 p-2 border rounded-lg">
+                        <input type="password" name="current_password"
+                               class="w-full mt-1 p-2 border rounded-lg">
                     </div>
 
                     <div>
                         <label class="block text-gray-700">New Password</label>
-                        <input type="password" name="new_password" class="w-full mt-1 p-2 border rounded-lg">
+                        <input type="password" name="new_password"
+                               class="w-full mt-1 p-2 border rounded-lg">
                     </div>
 
                     <button class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">
