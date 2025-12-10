@@ -7,7 +7,7 @@ use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserSettingsController;
-
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +45,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard/settings', [UserDashboardController::class, 'settings'])
         ->name('dashboard.settings');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CATEGORY PAGE (NEW)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])
+        ->name('categories.show');
 
 
     /*

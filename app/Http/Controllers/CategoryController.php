@@ -36,7 +36,10 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        // Load products belonging to this category
+        $products = $category->products()->latest()->get();
+
+        return view('categories.show', compact('category', 'products'));
     }
 
     /**
@@ -63,3 +66,4 @@ class CategoryController extends Controller
         //
     }
 }
+
