@@ -8,15 +8,24 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
-| PUBLIC ROUTE
+| PUBLIC ROUTES
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+
+// Home
+Route::view('/', 'welcome')->name('home');
+
+// Product Details
+Route::get('/product/{slug}', [ProductController::class, 'show'])
+    ->name('product.show');
+
+// Category Page
+Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])
+    ->name('categories.show');
 
 
 /*
@@ -31,62 +40,69 @@ Route::middleware(['auth', 'verified'])->group(function () {
     | USER DASHBOARD
     |--------------------------------------------------------------------------
     */
-    Route::get('/dashboard', [UserDashboardController::class, 'index'])
-        ->name('dashboard');
+    Route::prefix('dashboard')->group(function () {
 
-    Route::get('/dashboard/orders', [UserDashboardController::class, 'orders'])
-        ->name('dashboard.orders');
+        Route::get('/', [UserDashboardController::class, 'index'])
+            ->name('dashboard');
 
-    Route::get('/dashboard/favorites', [UserDashboardController::class, 'favorites'])
-        ->name('dashboard.favorites');
+        Route::get('/orders', [UserDashboardController::class, 'orders'])
+            ->name('dashboard.orders');
 
-    Route::get('/dashboard/plants', [UserDashboardController::class, 'plants'])
-        ->name('dashboard.plants');
+        Route::get('/favorites', [UserDashboardController::class, 'favorites'])
+            ->name('dashboard.favorites');
 
-    Route::get('/dashboard/settings', [UserDashboardController::class, 'settings'])
-        ->name('dashboard.settings');
+        Route::get('/plants', [UserDashboardController::class, 'plants'])
+            ->name('dashboard.plants');
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | CATEGORY PAGE (NEW)
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])
-        ->name('categories.show');
+        Route::get('/settings', [UserDashboardController::class, 'settings'])
+            ->name('dashboard.settings');
+    });
 
 
     /*
     |--------------------------------------------------------------------------
-    | ACCOUNT SETTINGS — SettingsController
+    | FAVORITES ROUTES
     |--------------------------------------------------------------------------
     */
-    Route::post('/settings/photo', [SettingsController::class, 'updatePhoto'])
-        ->name('settings.updatePhoto');
 
-    Route::post('/settings/info', [SettingsController::class, 'updateInfo'])
-        ->name('settings.updateInfo');
+    // Toggle Favorite (Add/Remove)
+    Route::post('/favorites/toggle/{id}', [UserDashboardController::class, 'toggleFavorite'])
+        ->name('favorites.toggle');
 
-    Route::post('/settings/password/update', [SettingsController::class, 'updatePassword'])
-        ->name('settings.updatePassword');
-
-    Route::post('/settings/delete', [SettingsController::class, 'deleteAccount'])
-        ->name('settings.deleteAccount');
+    // If you want a direct list route (dashboard.favorites already exists):
+    // Route::get('/favorites', [UserDashboardController::class, 'favorites'])
+    //     ->name('favorites');
 
 
     /*
     |--------------------------------------------------------------------------
-    | USER PROFILE — UserSettingsController
+    | USER ACCOUNT SETTINGS
     |--------------------------------------------------------------------------
     */
-    Route::get('/settings/profile', [UserSettingsController::class, 'edit'])
-        ->name('user.settings');
+    Route::prefix('settings')->group(function () {
 
-    Route::post('/settings/profile/update', [UserSettingsController::class, 'update'])
-        ->name('user.settings.update');
+        Route::post('/photo', [SettingsController::class, 'updatePhoto'])
+            ->name('settings.updatePhoto');
 
-    Route::post('/settings/profile/password/update', [UserSettingsController::class, 'updatePassword'])
-        ->name('user.settings.password');
+        Route::post('/info', [SettingsController::class, 'updateInfo'])
+            ->name('settings.updateInfo');
+
+        Route::post('/password/update', [SettingsController::class, 'updatePassword'])
+            ->name('settings.updatePassword');
+
+        Route::post('/delete', [SettingsController::class, 'deleteAccount'])
+            ->name('settings.deleteAccount');
+
+        // User Profile
+        Route::get('/profile', [UserSettingsController::class, 'edit'])
+            ->name('user.settings');
+
+        Route::post('/profile/update', [UserSettingsController::class, 'update'])
+            ->name('user.settings.update');
+
+        Route::post('/profile/password/update', [UserSettingsController::class, 'updatePassword'])
+            ->name('user.settings.password');
+    });
 
 
     /*
@@ -95,9 +111,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::prefix('messages')->group(function () {
-        Route::get('/', [MessageController::class, 'index'])->name('messages.index');
-        Route::get('/create', [MessageController::class, 'create'])->name('messages.create');
-        Route::post('/', [MessageController::class, 'store'])->name('messages.store');
+
+        Route::get('/', [MessageController::class, 'index'])
+            ->name('messages.index');
+
+        Route::get('/create', [MessageController::class, 'create'])
+            ->name('messages.create');
+
+        Route::post('/', [MessageController::class, 'store'])
+            ->name('messages.store');
     });
 
 
@@ -127,9 +149,36 @@ Route::middleware(['auth', 'admin'])
     ->group(function () {
 
         Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
+
         Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
         Route::get('/products', [AdminController::class, 'products'])->name('admin.products');
         Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
+
+        /*
+        |--------------------------------------------------------------------------
+        | CATEGORY MANAGEMENT (ADMIN)
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('categories')->group(function () {
+
+            Route::get('/', [CategoryController::class, 'index'])
+                ->name('admin.categories');
+
+            Route::get('/create', [CategoryController::class, 'create'])
+                ->name('admin.categories.create');
+
+            Route::post('/', [CategoryController::class, 'store'])
+                ->name('admin.categories.store');
+
+            Route::get('/{category}/edit', [CategoryController::class, 'edit'])
+                ->name('admin.categories.edit');
+
+            Route::put('/{category}', [CategoryController::class, 'update'])
+                ->name('admin.categories.update');
+
+            Route::delete('/{category}', [CategoryController::class, 'destroy'])
+                ->name('admin.categories.delete');
+        });
     });
 
 

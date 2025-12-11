@@ -10,8 +10,11 @@ class UserDashboardController extends Controller
 {
     public function index()
     {
-        $messages = Message::where('user_id', auth()->id())->latest()->get();
-        $categories = Category::all(); // <-- Added this
+        $messages = Message::where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        $categories = Category::all();
 
         return view('dashboard.index', compact('messages', 'categories'));
     }

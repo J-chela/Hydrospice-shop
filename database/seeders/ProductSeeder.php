@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
@@ -17,65 +18,42 @@ class ProductSeeder extends Seeder
         $spicesId = Category::where('slug', 'spices')->first()->id;
 
         $products = [
-            // Seedlings
-            [
-                'category_id' => $seedlingId,
-                'name' => 'Tomato Seedling',
-                'price' => 15,
-                'quantity' => 500,
-                'image' => 'https://via.placeholder.com/300?text=Tomato+Seedling',
-                'flash_sale' => true,
-                'flash_sale_ends_at' => now()->addHours(5),
-            ],
-            [
-                'category_id' => $seedlingId,
-                'name' => 'Onion Seedling',
-                'price' => 10,
-                'quantity' => 300,
-                'image' => 'https://via.placeholder.com/300?text=Onion+Seedling',
-            ],
 
-            // Seeds
-            [
-                'category_id' => $seedsId,
-                'name' => 'Kale Seeds',
-                'price' => 120,
-                'quantity' => 150,
-                'image' => 'https://via.placeholder.com/300?text=Kale+Seeds',
-            ],
-
-            // Crops
+            // Example crop item with flash sale
             [
                 'category_id' => $cropsId,
                 'name' => 'Fresh Spinach Bundle',
+                'slug' => Str::slug('Fresh Spinach Bundle'),
                 'price' => 40,
                 'quantity' => 200,
                 'image' => 'https://via.placeholder.com/300?text=Spinach',
                 'flash_sale' => true,
-                'flash_sale_ends_at' => now()->addHours(3),
+                'flash_sale_ends_at' => now()->addHours(2),
             ],
 
             // Herbs
             [
                 'category_id' => $herbsId,
-                'name' => 'Fresh Basil Leaves',
-                'price' => 80,
+                'name' => 'Basil Plant',
+                'slug' => Str::slug('Basil Plant'),
+                'price' => 25,
                 'quantity' => 100,
-                'image' => 'https://via.placeholder.com/300?text=Basil+Leaves',
+                'image' => 'https://via.placeholder.com/300?text=Basil+Plant',
             ],
 
             // Spices
             [
                 'category_id' => $spicesId,
-                'name' => 'Turmeric Powder',
-                'price' => 150,
-                'quantity' => 50,
-                'image' => 'https://via.placeholder.com/300?text=Turmeric',
+                'name' => 'Cilantro Seeds',
+                'slug' => Str::slug('Cilantro Seeds'),
+                'price' => 30,
+                'quantity' => 180,
+                'image' => 'https://via.placeholder.com/300?text=Cilantro+Seeds',
             ],
         ];
 
-        foreach ($products as $product) {
-            Product::create($product);
+        foreach ($products as $productData) {
+            Product::create($productData);
         }
     }
 }

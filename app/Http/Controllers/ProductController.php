@@ -8,58 +8,66 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display all products (optional — for shop page).
      */
     public function index()
     {
-        //
+        // Coming soon: Full shop listing
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show product creation form (admin only).
      */
     public function create()
     {
-        //
+        // Coming soon: Admin product creation
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created product (admin only).
      */
     public function store(Request $request)
     {
-        //
+        // Coming soon: Admin product upload
     }
 
     /**
-     * Display the specified resource.
+     * Display a single product using its slug.
      */
-    public function show(Product $product)
+    public function show($slug)
     {
-        //
+        $product = Product::with('category')->where('slug', $slug)->firstOrFail();
+
+        // Fetch related products from the same category
+        $related = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->limit(4)
+            ->get();
+
+        return view('products.show', compact('product', 'related'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Edit product (admin only).
      */
     public function edit(Product $product)
     {
-        //
+        // Coming soon: Admin product editing
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update product in database (admin only).
      */
     public function update(Request $request, Product $product)
     {
-        //
+        // Coming soon: Admin product update
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete product (admin only).
      */
     public function destroy(Product $product)
     {
-        //
+        // Coming soon: Admin delete feature
     }
 }

@@ -19,26 +19,35 @@
             Explore Categories
         </h2>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        @if($categories->count() > 0)
 
-            @foreach($categories as $category)
-                <a href="{{ route('categories.show', $category->slug) }}"
-                   class="block bg-gray-100 hover:bg-gray-200 border border-gray-200
-                          shadow-sm hover:shadow transition rounded-lg p-4 text-center">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
 
-                    <div class="text-4xl mb-2">
-                        {{ $category->icon }}
-                    </div>
+                @foreach($categories as $category)
+                    <a href="{{ route('categories.show', $category->slug) }}"
+                       class="block bg-gray-100 hover:bg-white border border-gray-200
+                              shadow-sm hover:shadow-md transition-all duration-200
+                              rounded-xl p-5 text-center">
 
-                    <div class="font-semibold text-gray-800">
-                        {{ $category->name }}
-                    </div>
+                        <div class="text-4xl mb-3">
+                            {{ $category->icon ?? '🌱' }}
+                        </div>
 
-                </a>
-            @endforeach
+                        <div class="font-semibold text-gray-800">
+                            {{ $category->name }}
+                        </div>
 
-        </div>
+                    </a>
+                @endforeach
+
+            </div>
+
+        @else
+            <p class="text-gray-600">No categories available yet.</p>
+        @endif
+
     </div>
 
 </div>
 @endsection
+

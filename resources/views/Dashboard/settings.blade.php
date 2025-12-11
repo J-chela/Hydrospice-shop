@@ -3,28 +3,7 @@
 @section('content')
 <div class="min-h-screen flex bg-gray-50">
 
-    <!-- LEFT SIDEBAR -->
-    <aside class="w-64 bg-white shadow-lg p-6 space-y-6">
-        <h2 class="text-xl font-semibold text-gray-800">User Dashboard</h2>
-
-        <nav class="space-y-3">
-            <a href="{{ route('dashboard') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-100">
-                🏠 <span class="ml-2">Dashboard</span>
-            </a>
-
-            <a href="{{ route('dashboard.favorites') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-100">
-                💚 <span class="ml-2">My Favorites</span>
-            </a>
-
-            <a href="{{ route('dashboard.orders') }}" class="flex items-center p-3 rounded-lg hover:bg-gray-100">
-                🛒 <span class="ml-2">My Orders</span>
-            </a>
-
-            <a href="{{ route('dashboard.settings') }}" class="flex items-center p-3 rounded-lg bg-blue-100 hover:bg-blue-200">
-                ⚙️ <span class="ml-2">Account Settings</span>
-            </a>
-        </nav>
-    </aside>
+  
 
     <!-- MAIN CONTENT -->
     <main class="flex-1 p-10">
