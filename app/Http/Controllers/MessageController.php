@@ -29,10 +29,31 @@ class MessageController extends Controller
 
     // Store message (supports AJAX + normal POST)
     public function store(Request $request)
+{
+    $request->validate([
+        'receiver_id' => 'required|exists:users,id',
+        'message' => 'required|string|max:1000',
+    ]);
+
+    $message = Message::create([
+        'sender_id' => Auth::id(),
+        'receiver_id' => $request->receiver_id,
+        'message' => $request->message,
+    ]);
+
+    broadcast(new MessageSent($message))->toOthers();
+
+    return response()->json([
+        'message' => $message,
+        'created_at' => $message->created_at->format('H:i'),
+    ]);
+}
+    // Store organization message to admin
+    public function storeOrganizationMessage(Request $request)
     {
         $request->validate([
             'subject' => 'required|string|max:255',
-            'body' => 'required|string|max:5000',
+            'body' => 'required|string|max:2000',
         ]);
 
         // Automatically send all organization messages to admin

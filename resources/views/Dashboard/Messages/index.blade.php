@@ -15,7 +15,7 @@
                         Hello, {{ Auth::user()->name }} 👋
                     </h3>
                     <p class="text-gray-600 text-sm">
-                        View or send messages to admin support.
+                        View or send messages to Main Shop.
                     </p>
                 </div>
                 <a href="{{ route('messages.create') }}"
