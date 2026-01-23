@@ -15,12 +15,25 @@ class Product extends Model
         'slug',
         'description',
         'price',
+        'discount_price',
+        'stock',
         'image',
         'category_id',
+        'is_flash_sale',
+        'flash_sale_price',
+        'flash_sale_ends_at',
     ];
 
     /**
-     * Automatically generate slug from name if not provided.
+     * Use slug for route model binding.
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /**
+     * Automatically generate unique slug.
      */
     protected static function boot()
     {
@@ -28,7 +41,15 @@ class Product extends Model
 
         static::creating(function ($product) {
             if (empty($product->slug)) {
-                $product->slug = Str::slug($product->name);
+                $baseSlug = Str::slug($product->name);
+                $slug = $baseSlug;
+                $count = 1;
+
+                while (static::where('slug', $slug)->exists()) {
+                    $slug = $baseSlug . '-' . $count++;
+                }
+
+                $product->slug = $slug;
             }
         });
     }
@@ -46,7 +67,6 @@ class Product extends Model
      */
     public function favoritedBy()
     {
-        return $this->belongsToMany(User::class, 'favorites')
-                    ->withTimestamps();
+        return $this->belongsToMany(User::class, 'favorites')->withTimestamps();
     }
 }

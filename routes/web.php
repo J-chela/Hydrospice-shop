@@ -7,8 +7,8 @@ use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserSettingsController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -179,6 +179,33 @@ Route::middleware(['auth', 'admin'])
             Route::delete('/{category}', [CategoryController::class, 'destroy'])
                 ->name('admin.categories.delete');
         });
+
+        /*
+        |--------------------------------------------------------------------------
+        | PRODUCT MANAGEMENT (ADMIN)
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('products')->group(function () {
+
+            Route::get('/', [ProductController::class, 'index'])
+                ->name('admin.products.index');
+
+            Route::get('/create', [ProductController::class, 'create'])
+                ->name('admin.products.create');
+
+            Route::post('/', [ProductController::class, 'store'])
+                ->name('admin.products.store');
+
+            Route::get('/{product}/edit', [ProductController::class, 'edit'])
+                ->name('admin.products.edit');
+
+            Route::put('/{product}', [ProductController::class, 'update'])
+                ->name('admin.products.update');
+
+            Route::delete('/{product}', [ProductController::class, 'destroy'])
+                ->name('admin.products.destroy');
+        });
+
     });
 
 
