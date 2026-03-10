@@ -9,6 +9,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\AdminMessageController; // <-- NEW
 
 /*
 |--------------------------------------------------------------------------
@@ -58,21 +59,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('dashboard.settings');
     });
 
-
     /*
     |--------------------------------------------------------------------------
     | FAVORITES ROUTES
     |--------------------------------------------------------------------------
     */
-
-    // Toggle Favorite (Add/Remove)
     Route::post('/favorites/toggle/{id}', [UserDashboardController::class, 'toggleFavorite'])
         ->name('favorites.toggle');
-
-    // If you want a direct list route (dashboard.favorites already exists):
-    // Route::get('/favorites', [UserDashboardController::class, 'favorites'])
-    //     ->name('favorites');
-
 
     /*
     |--------------------------------------------------------------------------
@@ -104,7 +97,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('user.settings.password');
     });
 
-
     /*
     |--------------------------------------------------------------------------
     | USER MESSAGES
@@ -121,7 +113,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/', [MessageController::class, 'store'])
             ->name('messages.store');
     });
-
 
     /*
     |--------------------------------------------------------------------------
@@ -206,8 +197,18 @@ Route::middleware(['auth', 'admin'])
                 ->name('admin.products.destroy');
         });
 
-    });
+        /*
+        |--------------------------------------------------------------------------
+        | ADMIN MESSAGES
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('messages')->group(function () {
+            Route::get('/', [AdminMessageController::class, 'index'])->name('admin.messages.index'); // list messages
+            Route::get('/{id}', [AdminMessageController::class, 'show'])->name('admin.messages.show'); // view single
+            Route::post('/reply/{id}', [AdminMessageController::class, 'reply'])->name('admin.messages.reply'); // reply
+        });
 
+    });
 
 /*
 |--------------------------------------------------------------------------
