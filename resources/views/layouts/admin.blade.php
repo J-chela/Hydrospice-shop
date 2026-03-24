@@ -35,185 +35,99 @@
     </style>
 </head>
 
-<body class="min-h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+<body class="app-shell">
 
 <div class="flex min-h-screen">
 
     <!-- ADMIN SIDEBAR -->
-    <aside class="w-20 bg-white dark:bg-gray-900 shadow-lg flex flex-col items-center py-6 space-y-8 border-r border-gray-200 dark:border-gray-700">
+    <aside class="hidden md:flex w-24 flex-col items-center gap-5 border-r border-slate-200 bg-white py-6 shadow-sm">
 
         <!-- Admin Logo/Brand -->
         <div class="text-center">
             <div class="text-3xl mb-1">👑</div>
-            <div class="text-xs font-semibold text-gray-500 dark:text-gray-400">ADMIN</div>
+            <div class="text-xs font-semibold text-slate-500">ADMIN</div>
         </div>
 
-        <nav class="flex flex-col items-center space-y-8 text-2xl flex-1">
+        <nav class="flex flex-col gap-3 text-xl flex-1">
 
             <!-- ADMIN DASHBOARD -->
-            <a href="/admin" class="relative group text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+            <a href="{{ route('admin.dashboard') }}" class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'sidebar-link-active' : '' }}" title="Dashboard">
                 <span>📊</span>
-                <span class="tooltip">Dashboard</span>
             </a>
 
             <!-- USERS MANAGEMENT -->
-            <a href="/admin/users" class="relative group text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+            <a href="{{ route('admin.users') }}" class="sidebar-link {{ request()->routeIs('admin.users') ? 'sidebar-link-active' : '' }}" title="Users">
                 <span>👥</span>
-                <span class="tooltip">Users</span>
             </a>
 
 
             <!-- CATEGORIES -->
-            <a href="/admin/categories" class="relative group text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+            <a href="{{ route('admin.categories') }}" class="sidebar-link {{ request()->routeIs('admin.categories*') ? 'sidebar-link-active' : '' }}" title="Categories">
                 <span>🏷️</span>
-                <span class="tooltip">Categories</span>
             </a>
 
             <!-- ALL ORDERS -->
-            <a href="/admin/products" class="relative group text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+            <a href="{{ route('admin.products.index') }}" class="sidebar-link {{ request()->routeIs('admin.products*') ? 'sidebar-link-active' : '' }}" title="Products">
                 <span>📦</span>
-                <span class="tooltip">
-                    Products
-                    <span class="admin-badge">All</span>
-                </span>
             </a>
 
+            <a href="{{ route('admin.orders') }}" class="sidebar-link {{ request()->routeIs('admin.orders') ? 'sidebar-link-active' : '' }}" title="Orders">
+                <span>🧾</span>
+            </a>
 
-            <!-- SETTINGS -->
-            <a href="/admin/settings" class="relative group text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
-                <span>⚙️</span>
-                <span class="tooltip">Settings</span>
+            <a href="{{ route('admin.messages.index') }}" class="sidebar-link {{ request()->routeIs('admin.messages*') ? 'sidebar-link-active' : '' }}" title="Messages">
+                <span>✉️</span>
             </a>
 
         </nav>
 
         <!-- ADMIN PROFILE / LOGOUT -->
-        <div class="mt-auto space-y-6">
+        <div class="mt-auto space-y-4">
            
             
             <!-- Admin Profile -->
-            <a href="/admin/profile" class="relative group block">
-                <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-lg">
+            <a href="{{ route('profile.edit') }}" class="block">
+                <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-lg">
                     <span>👤</span>
                 </div>
-                <span class="tooltip">Profile</span>
             </a>
             
             <!-- Logout -->
-            <a href="/logout" class="relative group text-red-500 hover:text-red-600">
-                <span>🚪</span>
-                <span class="tooltip">Logout</span>
-            </a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="sidebar-link text-red-600 hover:bg-red-50 hover:text-red-700" title="Logout">🚪</button>
+            </form>
         </div>
 
     </aside>
 
     <!-- MAIN CONTENT AREA -->
-    <main class="flex-1 p-6">
+    <main class="flex-1">
         <!-- Admin Header -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">@yield('title', 'Admin Panel')</h1>
-            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-2">
-                <a href="/admin/" class="hover:text-indigo-600 dark:hover:text-indigo-400">Dashboard</a>
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
+            <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
+                <h1 class="text-lg font-semibold text-slate-800">@yield('title', 'Admin Panel')</h1>
+                <a href="{{ route('home') }}" class="text-sm text-slate-600 hover:text-slate-900">Back to Store</a>
+            </div>
+        </header>
+        <section class="mx-auto max-w-7xl p-4 sm:p-6">
+            <div class="mb-6">
+                <div class="flex items-center text-sm text-gray-500 mt-2">
+                    <a href="{{ route('admin.dashboard') }}" class="hover:text-indigo-600">Dashboard</a>
                 @hasSection('breadcrumbs')
                     <span class="mx-2">›</span>
                     @yield('breadcrumbs')
                 @endif
+                </div>
             </div>
-        </div>
-        
-        <!-- Quick Stats Bar (Optional) -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-                <div class="text-sm text-gray-500 dark:text-gray-400">Total Users</div>
-                <div class="text-2xl font-bold">1,234</div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-                <div class="text-sm text-gray-500 dark:text-gray-400">Today's Orders</div>
-                <div class="text-2xl font-bold">42</div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-                <div class="text-sm text-gray-500 dark:text-gray-400">Pending</div>
-                <div class="text-2xl font-bold text-yellow-600">18</div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow">
-                <div class="text-sm text-gray-500 dark:text-gray-400">Revenue</div>
-                <div class="text-2xl font-bold text-green-600">$5,678</div>
-            </div>
-        </div>
-        
-        <!-- Content -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+            <div class="panel">
             @yield('content')
+            </div>
         </div>
+        </section>
     </main>
 
 </div>
-
-<!-- Tooltip CSS (Same as user side) -->
-<style>
-.tooltip {
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%) translateX(10px);
-    background-color: #4F46E5;
-    color: white;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s, transform 0.2s;
-    z-index: 50;
-    min-width: 100px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-.group:hover .tooltip {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0);
-}
-
-/* Dark mode tooltip */
-.dark .tooltip {
-    background-color: #3730A3;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-    .tooltip {
-        display: none; /* Hide tooltips on mobile */
-    }
-    
-    aside {
-        width: 60px;
-    }
-}
-</style>
-
-<!-- Theme Script (Same as user side) -->
-<script>
-(function setInitialTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-    }
-})();
-
-// Add admin-specific scripts if needed
-document.addEventListener('DOMContentLoaded', function() {
-    // Example: Highlight current page in sidebar
-    const currentPath = window.location.pathname;
-    document.querySelectorAll('aside a').forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-            link.classList.add('text-indigo-600', 'dark:text-indigo-400');
-            link.classList.remove('text-gray-700', 'dark:text-gray-300');
-        }
-    });
-});
-</script>
 
 </body>
 </html>

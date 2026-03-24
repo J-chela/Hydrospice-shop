@@ -9,96 +9,39 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="min-h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
-
+<body class="app-shell">
 <div class="flex min-h-screen">
+    <aside class="hidden md:flex w-24 flex-col items-center gap-5 border-r border-slate-200 bg-white py-6 shadow-sm">
+        <a href="{{ route('home') }}" class="text-2xl" title="Home">🌿</a>
 
-    <!-- SIDEBAR -->
-    <aside class="w-20 bg-white dark:bg-gray-900 shadow-lg flex flex-col items-center py-6 space-y-8">
-
-        <div class="text-3xl">🌿</div>
-
-        <nav class="flex flex-col items-center space-y-8 text-2xl">
-
-            <!-- DASHBOARD -->
-            <a href="/dashboard" class="relative group text-gray-700 dark:text-gray-300">
-                <span>🏠</span>
-                <span class="tooltip">Dashboard</span>
-            </a>
-
-            <!-- PLANTS -->
-            <a href="/dashboard/plants" class="relative group text-gray-700 dark:text-gray-300">
-                <span>🪴</span>
-                <span class="tooltip">Plants</span>
-            </a>
-
-            <!-- ORDERS -->
-            <a href="/dashboard/orders" class="relative group text-gray-700 dark:text-gray-300">
-                <span>📦</span>
-                <span class="tooltip">Orders</span>
-            </a>
-
-            <!-- MESSAGES -->
-            <a href="/messages" class="relative group text-gray-700 dark:text-gray-300">
-                <span>💬</span>
-                <span class="tooltip">Messages</span>
-            </a>
-
-            <!-- FAVORITES -->
-            <a href="/dashboard/favorites" class="relative group text-gray-700 dark:text-gray-300">
-                <span>⭐</span>
-                <span class="tooltip">Favorites</span>
-            </a>
-
-            <!-- SETTINGS -->
-            <a href="/dashboard/settings" class="relative group text-gray-700 dark:text-gray-300">
-                <span>⚙️</span>
-                <span class="tooltip">Settings</span>
-            </a>
-
+        <nav class="flex flex-col gap-3 text-xl">
+            <a href="{{ route('dashboard') }}" class="sidebar-link {{ request()->routeIs('dashboard') ? 'sidebar-link-active' : '' }}" title="Dashboard">🏠</a>
+            <a href="{{ route('dashboard.plants') }}" class="sidebar-link {{ request()->routeIs('dashboard.plants') ? 'sidebar-link-active' : '' }}" title="Plants">🪴</a>
+            <a href="{{ route('dashboard.orders') }}" class="sidebar-link {{ request()->routeIs('dashboard.orders') ? 'sidebar-link-active' : '' }}" title="Orders">📦</a>
+            <a href="{{ route('messages.index') }}" class="sidebar-link {{ request()->routeIs('messages.*') ? 'sidebar-link-active' : '' }}" title="Messages">💬</a>
+            <a href="{{ route('dashboard.favorites') }}" class="sidebar-link {{ request()->routeIs('dashboard.favorites') ? 'sidebar-link-active' : '' }}" title="Favorites">⭐</a>
+            <a href="{{ route('dashboard.settings') }}" class="sidebar-link {{ request()->routeIs('dashboard.settings') ? 'sidebar-link-active' : '' }}" title="Settings">⚙️</a>
         </nav>
-
     </aside>
 
-    <!-- MAIN CONTENT AREA -->
-    <main class="flex-1 p-6">
-        @yield('content')
+    <main class="flex-1">
+        <header class="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
+            <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
+                <h1 class="text-lg font-semibold text-slate-800">HydroSpice Dashboard</h1>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('profile.edit') }}" class="rounded-lg border border-slate-300 px-3 py-1.5 text-sm hover:bg-slate-50">Profile</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="rounded-lg bg-slate-900 px-3 py-1.5 text-sm text-white hover:bg-slate-700">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <section class="mx-auto max-w-7xl p-4 sm:p-6">
+            @yield('content')
+        </section>
     </main>
-
 </div>
-
-<!-- Tooltip CSS -->
-<style>
-.tooltip {
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%) translateX(10px);
-    background-color: #4ADE80;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s, transform 0.2s;
-}
-.group:hover .tooltip {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0);
-}
-</style>
-
-<!-- Theme Script -->
-<script>
-(function setInitialTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-    }
-})();
-</script>
-
 </body>
 </html>

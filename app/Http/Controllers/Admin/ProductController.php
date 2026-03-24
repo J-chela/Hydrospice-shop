@@ -62,14 +62,16 @@ class ProductController extends Controller
     /**
      * PUBLIC: Show single product
      */
-    public function show(Product $product)
+    public function show(string $slug)
     {
+        $product = Product::where('slug', $slug)->firstOrFail();
+
         $related = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->limit(4)
             ->get();
 
-        return view('products.show', compact('product', 'related'));
+        return view('product.show', compact('product', 'related'));
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Product;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserDashboardController;
@@ -18,7 +19,42 @@ use App\Http\Controllers\Admin\AdminMessageController; // <-- NEW
 */
 
 // Home
-Route::view('/', 'welcome')->name('home');
+Route::get('/', function () {
+    $featuredFallback = false;
+
+    try {
+        $featuredProducts = Product::query()
+            ->whereNotNull('slug')
+            ->latest()
+            ->take(3)
+            ->get();
+    } catch (\Throwable $e) {
+        // Keep the landing page available even when the DB driver/service is down.
+        $featuredFallback = true;
+        $featuredProducts = collect([
+            (object) [
+                'name' => 'Hydroponic Starter Kit',
+                'description' => 'A complete entry kit with nutrient support, optimized for beginners.',
+                'slug' => null,
+                'image' => 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=900&q=70',
+            ],
+            (object) [
+                'name' => 'Herb Seedling Pack',
+                'description' => 'Fresh, healthy seedlings selected for flavor, durability, and strong growth.',
+                'slug' => null,
+                'image' => 'https://images.unsplash.com/photo-1461354464878-ad92f492a5a0?auto=format&fit=crop&w=900&q=70',
+            ],
+            (object) [
+                'name' => 'Signature Spice Collection',
+                'description' => 'Curated everyday spices with rich aroma and dependable quality.',
+                'slug' => null,
+                'image' => 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=900&q=70',
+            ],
+        ]);
+    }
+
+    return view('welcome', compact('featuredProducts', 'featuredFallback'));
+})->name('home');
 
 // Product Details
 Route::get('/product/{slug}', [ProductController::class, 'show'])
@@ -142,7 +178,6 @@ Route::middleware(['auth', 'admin'])
         Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
 
         Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
-        Route::get('/products', [AdminController::class, 'products'])->name('admin.products');
         Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
 
         /*
